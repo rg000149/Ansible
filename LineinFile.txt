@@ -1,0 +1,42 @@
+replace.yml
+
+---
+- hosts: all
+  remote_user: root
+  become: true
+  gather_facts: no
+  tasks:
+  - name: Ensure Selinux is set to permissive mode
+    lineinfile:
+      path: /etc/selinux/config
+      regexp: '^SELINUX='
+      line: SELINUX=test
+
+-----------------------------------------
+
+---
+  - hosts: all
+    become: true
+    gather_facts: no
+    #check_mode: no
+    tasks:
+        - name: Delete line from a file
+          lineinfile:
+            path: /etc/selinux/config
+            regexp: '^this'
+            state: absent 
+
+-----------------------------------------
+
+---
+- hosts: all
+  remote_user: root
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: Insert new line into a file
+    lineinfile:
+      path: /tmp/pavani1
+      line: This line is inserted by ansible master server
+            
+---------------------------------------------------
